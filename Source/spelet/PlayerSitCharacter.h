@@ -40,8 +40,8 @@ public:
 	APlayerController* PC;
 	
 	UPROPERTY(EditAnywhere, Category="Camera")
-	float EdgeTurnSpeed = 100.f;
+	float EdgeTurnSpeed = 75.f;
 	
 	UPROPERTY(EditAnywhere, Category="Camera")
-	float DeadzoneThreshold = 0.2f;
+	float DeadzoneThreshold = 0.1f;
 };

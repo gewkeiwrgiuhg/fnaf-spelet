@@ -60,8 +60,4 @@ void ADoorButton::Tick(float DeltaTime)
 			bIsMoving = false;
 		}
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("bIsMoving is false"));
-	}
 }

@@ -30,16 +30,20 @@ void APlayerSitCharacter::BeginPlay()
         PC->bShowMouseCursor = true;
         PC->bEnableClickEvents = true;
         PC->bEnableMouseOverEvents = true;
-        
-        PC->PlayerCameraManager->ViewPitchMin = -30.0f;
-        PC->PlayerCameraManager->ViewPitchMax = 45.0f;
+
+        PC->PlayerCameraManager->ViewPitchMin = -10.f;
+        PC->PlayerCameraManager->ViewPitchMax = 10.f;
         PC->PlayerCameraManager->ViewYawMin = -60.f;
-        PC->PlayerCameraManager->ViewYawMax = 60.0f;
+        PC->PlayerCameraManager->ViewYawMax = 60.f;
 
         FInputModeGameAndUI InputMode;
-        InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+        InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
         InputMode.SetHideCursorDuringCapture(false);
         PC->SetInputMode(InputMode);
+
+
+        PC->SetIgnoreLookInput(false);
+        PC->SetIgnoreMoveInput(false);
     }
 }
 
@@ -73,7 +77,7 @@ void APlayerSitCharacter::Interact()
 {
     if (!PC)
     {
-        UE_LOG(LogTemp, Warning, TEXT("NO PLAYER CONTROLLER FOUND!!!!!!!"));
+        UE_LOG(LogTemp, Warning, TEXT("No player controller found when interacting."));
         return;
     }
 
