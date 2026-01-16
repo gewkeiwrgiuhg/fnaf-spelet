@@ -48,9 +48,20 @@ void ADoorButton::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (bIsMoving && DoorActor)
+	if (bIsMoving)
 	{
 		FVector currentLocation = DoorActor->GetActorLocation();
-		FVector newLocation = FMath::VInterpConstantTo(currentLocation, TargetDoorLocation, DeltaTime, MoveSpeed);
+		FVector newLocation = FMath::VInterpTo(currentLocation, TargetDoorLocation, DeltaTime, MoveSpeed);
+		
+		DoorActor->SetActorLocation(newLocation);
+		
+		if (newLocation.Equals(TargetDoorLocation, 1.f))
+		{
+			bIsMoving = false;
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("bIsMoving is false"));
 	}
 }

@@ -28,7 +28,7 @@ public:
 	float OpenHeight = 300.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interaction")
-	float MoveSpeed = 200.f;
+	float MoveSpeed = 3.f;
 
 	FVector InitialDoorLocation;
 	FVector TargetDoorLocation;
