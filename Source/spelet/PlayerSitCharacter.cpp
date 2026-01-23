@@ -40,8 +40,7 @@ void APlayerSitCharacter::BeginPlay()
         InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
         InputMode.SetHideCursorDuringCapture(false);
         PC->SetInputMode(InputMode);
-
-
+        
         PC->SetIgnoreLookInput(false);
         PC->SetIgnoreMoveInput(false);
     }

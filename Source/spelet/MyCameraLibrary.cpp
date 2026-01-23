@@ -2,28 +2,32 @@
 
 
 #include "MyCameraLibrary.h"
-
+#include "Camera/CameraComponent.h"
 #include "Camera/CameraActor.h"
 #include "Kismet/GameplayStatics.h"
 
-ACameraActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, FString targetName)
+
+AActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, const FString TargetName)
 {
-	if (!WorldContextObject)
+	if (!WorldContextObject) return nullptr;
+
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(
+		WorldContextObject,
+		AActor::StaticClass(),
+		Actors
+	);
+
+	for (AActor* Actor : Actors)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("NO WCO"));
-		return nullptr;
-	}
-	
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(WorldContextObject, ACameraActor::StaticClass(), FoundActors);
-	
-	for (AActor* Actor : FoundActors)
-	{
-		if (Actor && (Actor->GetName() == targetName || Actor->GetActorLabel() == targetName))
+		if (!Actor) continue;
+
+		if (Actor->GetName().Contains(TargetName) &&
+			Actor->FindComponentByClass<UCameraComponent>())
 		{
-			return Cast<ACameraActor>(Actor);
+			return Actor;
 		}
 	}
-	
+
 	return nullptr;
 }

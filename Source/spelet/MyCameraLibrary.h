@@ -14,6 +14,6 @@ class SPELET_API UMyCameraLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 	
-	UFUNCTION(BlueprintCallable, Category="Camera")
-	static ACameraActor* GetCameraByName(UObject* WorldContextObject, FString targetName);
+	UFUNCTION(BlueprintCallable, Category = "Camera", meta = (WorldContext = "WorldContextObject"))
+    static AActor* GetCameraByName(UObject* WorldContextObject, const FString TargetName);
 };
