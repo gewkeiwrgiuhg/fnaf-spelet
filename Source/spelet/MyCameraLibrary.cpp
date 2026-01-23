@@ -9,21 +9,43 @@
 
 AActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, const FString TargetName)
 {
-	if (!WorldContextObject) return nullptr;
+	UE_LOG(LogTemp, Error, TEXT(">>> GetCameraByName CALLED <<<"));
+	
+	UWorld* World = nullptr;
+
+	if (WorldContextObject)
+	{
+		World = WorldContextObject->GetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NO WORLD"));
+		return nullptr;
+	}
 
 	TArray<AActor*> Actors;
 	UGameplayStatics::GetAllActorsOfClass(
-		WorldContextObject,
+		World,
 		AActor::StaticClass(),
 		Actors
 	);
 
 	for (AActor* Actor : Actors)
 	{
-		if (!Actor) continue;
+		UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *Actor->GetName());
+	}
 
-		if (Actor->GetName().Contains(TargetName) &&
-			Actor->FindComponentByClass<UCameraComponent>())
+	for (AActor* Actor : Actors)
+	{
+		if (!Actor)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ACTOR NOT FOUND"));
+			continue;
+		};
+		
+		UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *Actor->GetName());
+		if (Actor->GetName().Contains(TargetName)) //&& Actor->FindComponentByClass<UCameraComponent>())
 		{
 			return Actor;
 		}
