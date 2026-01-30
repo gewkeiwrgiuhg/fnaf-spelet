@@ -53,3 +53,21 @@ AActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, const FSt
 
 	return nullptr;
 }
+
+void UMyCameraLibrary::SwitchToCamera(UObject* WorldContextObject, const FString& actorName, bool inputEnabled, bool antiAliasingEnabled)
+{
+	AActor* camera = UMyCameraLibrary::GetCameraByName(WorldContextObject, actorName);
+	if (camera)
+	{
+		APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0);
+		PC->SetViewTarget(camera);
+		PC->SetIgnoreLookInput(inputEnabled);
+		PC->SetIgnoreMoveInput(inputEnabled);
+		
+		antiAliasingEnabled ? PC->ConsoleCommand("r.DefaultFeature.AntiAliasing 1") : PC->ConsoleCommand("r.DefaultFeature.AntiAliasing 0");
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NO CAMERA FOUND"));
+	}
+}

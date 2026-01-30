@@ -16,4 +16,7 @@ class SPELET_API UMyCameraLibrary : public UBlueprintFunctionLibrary
 	
 	UFUNCTION(BlueprintCallable, Category = "Camera", meta = (WorldContext = "WorldContextObject"))
     static AActor* GetCameraByName(UObject* WorldContextObject, const FString TargetName);
+	
+	UFUNCTION(BlueprintCallable, Category="Camera", meta=(WorldContext = "WorldContextObject"))
+	static void SwitchToCamera(UObject* WorldContextObject, const FString& actorName, bool inputEnabled, bool antiAliasingEnabled);
 };
