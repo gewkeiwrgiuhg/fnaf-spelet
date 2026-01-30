@@ -6,7 +6,6 @@
 #include "Camera/CameraActor.h"
 #include "Kismet/GameplayStatics.h"
 
-
 AActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, const FString TargetName)
 {
 	UE_LOG(LogTemp, Error, TEXT(">>> GetCameraByName CALLED <<<"));
@@ -42,7 +41,7 @@ AActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, const FSt
 		{
 			UE_LOG(LogTemp, Warning, TEXT("ACTOR NOT FOUND"));
 			continue;
-		};
+		}
 		
 		UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *Actor->GetName());
 		if (Actor->GetName().Contains(TargetName)) //&& Actor->FindComponentByClass<UCameraComponent>())

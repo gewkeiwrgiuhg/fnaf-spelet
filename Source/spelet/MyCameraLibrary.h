@@ -6,9 +6,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MyCameraLibrary.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SPELET_API UMyCameraLibrary : public UBlueprintFunctionLibrary
 {
