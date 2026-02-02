@@ -35,8 +35,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Actions")
 	void AttemptMove();
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Settings")
-	float refreshTime = 0.5f;
+	float refreshTime = 10.f;
 	
 	int32 currentWaypoint = 0;
 	FTimerHandle MovementTimerHandle;
