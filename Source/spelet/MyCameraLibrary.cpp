@@ -32,18 +32,11 @@ AActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, const FSt
 
 	for (AActor* Actor : Actors)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *Actor->GetName());
-	}
-
-	for (AActor* Actor : Actors)
-	{
 		if (!Actor)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("ACTOR NOT FOUND"));
 			continue;
 		}
 		
-		UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *Actor->GetName());
 		if (Actor->GetName().Contains(TargetName)) //&& Actor->FindComponentByClass<UCameraComponent>())
 		{
 			return Actor;
@@ -78,8 +71,8 @@ void UMyCameraLibrary::SwitchToActorOfClass(UObject* WorldContextObject, TSubcla
 	{
 		APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0);
 		PC->SetViewTarget(camera);
-		PC->SetIgnoreLookInput(inputEnabled);
-		PC->SetIgnoreMoveInput(inputEnabled);
+		PC->SetIgnoreLookInput(!inputEnabled);
+		PC->SetIgnoreMoveInput(!inputEnabled);
 		
 		antiAliasingEnabled ? PC->ConsoleCommand("r.DefaultFeature.AntiAliasing 1") : PC->ConsoleCommand("r.DefaultFeature.AntiAliasing 0");
 	}

@@ -12,8 +12,6 @@ ADoorButton::ADoorButton()
 
 void ADoorButton::Interact_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("INTERACTING WITH DOOR"));
-	
 	isOpen = !isOpen;
 	bIsMoving = true;
 	

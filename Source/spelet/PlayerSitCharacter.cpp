@@ -41,8 +41,8 @@ void APlayerSitCharacter::BeginPlay()
         InputMode.SetHideCursorDuringCapture(false);
         PC->SetInputMode(InputMode);
         
-        PC->SetIgnoreLookInput(false);
-        PC->SetIgnoreMoveInput(false);
+        //PC->SetIgnoreLookInput(false);
+        //PC->SetIgnoreMoveInput(false);
     }
 }
 
