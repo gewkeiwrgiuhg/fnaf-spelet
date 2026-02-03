@@ -20,7 +20,7 @@ void AAICharacter::BeginPlay()
 	if (MovementWaypoints.IsValidIndex(0))
 	{
 		SetActorLocation(MovementWaypoints[0].Waypoint->GetActorLocation());
-		SetActorRotation(MovementWaypoints[0].Waypoint->GetActorRotation());	
+		SetActorRotation(MovementWaypoints[0].Waypoint->GetActorRotation());
 	}
 }
 
