@@ -48,7 +48,15 @@ void AAICharacter::AttemptMove()
 		if (currentWaypoint + 1 < MovementWaypoints.Num()) // nuvarande waypoint är inte högre än totala mängden waypoints
 		{
 			currentWaypoint++;
-			AActor* targetWaypoint = MovementWaypoints[currentWaypoint];
+			FWaypointData waypointData = MovementWaypoints[currentWaypoint];
+			AActor* targetWaypoint = waypointData.Waypoint;
+			UAnimSequence* AnimToPlay = waypointData.AnimationToPlay;
+			
+			if (AnimToPlay)
+			{
+				GetMesh()->PlayAnimation(AnimToPlay, false);
+				UE_LOG(LogTemp, Warning, TEXT("Playing animation: %d"), AnimToPlay->GetName());
+			}
 			
 			if (targetWaypoint != nullptr)
 			{

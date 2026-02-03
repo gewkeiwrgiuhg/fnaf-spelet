@@ -6,6 +6,20 @@
 #include "GameFramework/Character.h"
 #include "AICharacter.generated.h"
 
+class UAnimSequence;
+
+USTRUCT(BlueprintType)
+struct FWaypointData
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Waypoints")
+	AActor* Waypoint = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Waypoints")
+	UAnimSequence* AnimationToPlay = nullptr;
+};
+
 UCLASS()
 class SPELET_API AAICharacter : public ACharacter
 {
@@ -33,10 +47,10 @@ public:
 	FString name = "Placeholder";
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom Navigation")
-	TArray<AActor*> MovementWaypoints;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="CUstom Navigation")
 	AActor* finalWaypoint; 
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom Navigation")
+	TArray<FWaypointData> MovementWaypoints;
 	
 	UFUNCTION(BlueprintCallable, Category="Actions")
 	void AttemptMove();
