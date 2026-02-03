@@ -17,10 +17,10 @@ void AAICharacter::BeginPlay()
 	currentWaypoint = 0;
 	
 	GetWorld()->GetTimerManager().SetTimer(MovementTimerHandle, this, &AAICharacter::AttemptMove, refreshTime, true);
-	if (MovementWaypoints.IsValidIndex(0) && MovementWaypoints[0] != nullptr)
+	if (MovementWaypoints.IsValidIndex(0))
 	{
-		SetActorLocation(MovementWaypoints[0]->GetActorLocation());
-		SetActorRotation(MovementWaypoints[0]->GetActorRotation());
+		SetActorLocation(MovementWaypoints[0].Waypoint->GetActorLocation());
+		SetActorRotation(MovementWaypoints[0].Waypoint->GetActorRotation());	
 	}
 }
 
