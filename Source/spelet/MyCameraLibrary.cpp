@@ -71,7 +71,7 @@ void UMyCameraLibrary::SwitchToActorOfClass(UObject* WorldContextObject, TSubcla
 	{
 		APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0);
 		PC->SetViewTarget(camera);
-		PC->SetIgnoreLookInput(!inputEnabled);
+		PC->SetIgnoreLookInput(!inputEnabled); // inverterad för att om inputEnabled är true så kommer input att vara disasbled
 		PC->SetIgnoreMoveInput(!inputEnabled);
 		
 		antiAliasingEnabled ? PC->ConsoleCommand("r.DefaultFeature.AntiAliasing 1") : PC->ConsoleCommand("r.DefaultFeature.AntiAliasing 0");

@@ -39,9 +39,21 @@ public:
 
 	APlayerController* PC;
 	
-	UPROPERTY(EditAnywhere, Category="Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
 	float EdgeTurnSpeed = 75.f;
 	
-	UPROPERTY(EditAnywhere, Category="Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
 	float DeadzoneThreshold = 0.1f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+	float pitchMin = -10.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+	float pitchMax = 10.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+	float yawMin = -60.f;
+	
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float yawMax = 60.f;
 };

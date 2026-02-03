@@ -8,7 +8,6 @@ AAICharacter::AAICharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -61,9 +60,21 @@ void AAICharacter::AttemptMove()
 				UE_LOG(LogTemp, Error, TEXT("No target waypoint found."));
 			}
 		}
+		else // on final waypoint
+		{
+			if (finalWaypoint == nullptr)
+			{
+				UE_LOG(LogTemp, Error, TEXT("Final waypoint not found"));
+				return;
+			}
+			
+			UE_LOG(LogTemp, Warning, TEXT("Is on final waypoint"));
+			SetActorLocation(finalWaypoint->GetActorLocation());
+			SetActorRotation(finalWaypoint->GetActorRotation());
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Roll failed, number gotten: %d vs AILevel: &d"), randomNumber, AILevel);
+		UE_LOG(LogTemp, Warning, TEXT("Roll failed, number gotten: %d vs AILevel: %d"), randomNumber, AILevel);
 	}
 }

@@ -31,10 +31,10 @@ void APlayerSitCharacter::BeginPlay()
         PC->bEnableClickEvents = true;
         PC->bEnableMouseOverEvents = true;
 
-        PC->PlayerCameraManager->ViewPitchMin = -10.f;
-        PC->PlayerCameraManager->ViewPitchMax = 10.f;
-        PC->PlayerCameraManager->ViewYawMin = -60.f;
-        PC->PlayerCameraManager->ViewYawMax = 60.f;
+        PC->PlayerCameraManager->ViewPitchMin = pitchMin;
+        PC->PlayerCameraManager->ViewPitchMax = pitchMax;
+        PC->PlayerCameraManager->ViewYawMin = yawMin;
+        PC->PlayerCameraManager->ViewYawMax = yawMax;
 
         FInputModeGameAndUI InputMode;
         InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);

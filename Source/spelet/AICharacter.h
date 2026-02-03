@@ -29,8 +29,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats", meta = (ClampMin = "1", ClampMax = "20", UIMin = "1", UIMax = "20"))
 	int32 AILevel = 1;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	FString name = "Placeholder";
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom Navigation")
 	TArray<AActor*> MovementWaypoints;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="CUstom Navigation")
+	AActor* finalWaypoint; 
 	
 	UFUNCTION(BlueprintCallable, Category="Actions")
 	void AttemptMove();
