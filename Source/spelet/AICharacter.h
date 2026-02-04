@@ -47,7 +47,7 @@ public:
 	FString name = "Placeholder";
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom Navigation")
-	AActor* finalWaypoint; 
+	FWaypointData finalWaypoint; 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom Navigation")
 	TArray<FWaypointData> MovementWaypoints;

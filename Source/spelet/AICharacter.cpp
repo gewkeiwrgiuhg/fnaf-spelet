@@ -55,7 +55,7 @@ void AAICharacter::AttemptMove()
 			if (AnimToPlay)
 			{
 				GetMesh()->PlayAnimation(AnimToPlay, false);
-				UE_LOG(LogTemp, Warning, TEXT("Playing animation: %d"), AnimToPlay->GetName());
+				UE_LOG(LogTemp, Warning, TEXT("Playing animation: %s"), *AnimToPlay->GetName());
 			}
 			
 			if (targetWaypoint != nullptr)
@@ -70,15 +70,24 @@ void AAICharacter::AttemptMove()
 		}
 		else // on final waypoint
 		{
-			if (finalWaypoint == nullptr)
+			if (finalWaypoint.Waypoint == nullptr)
 			{
 				UE_LOG(LogTemp, Error, TEXT("Final waypoint not found"));
 				return;
 			}
 			
 			UE_LOG(LogTemp, Warning, TEXT("Is on final waypoint"));
-			SetActorLocation(finalWaypoint->GetActorLocation());
-			SetActorRotation(finalWaypoint->GetActorRotation());
+			SetActorLocation(finalWaypoint.Waypoint->GetActorLocation());
+			SetActorRotation(finalWaypoint.Waypoint->GetActorRotation());
+			
+			if (finalWaypoint.AnimationToPlay)
+			{
+				GetMesh()->PlayAnimation(finalWaypoint.AnimationToPlay, false);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No animation found to play"));
+			}
 		}
 	}
 	else

@@ -70,7 +70,7 @@ void UMyCameraLibrary::SwitchToActorOfClass(UObject* WorldContextObject, TSubcla
 	if (camera)
 	{
 		APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0);
-		PC->SetViewTarget(camera);
+		PC->SetViewTargetWithBlend(camera);
 		PC->SetIgnoreLookInput(!inputEnabled); // inverterad för att om inputEnabled är true så kommer input att vara disasbled
 		PC->SetIgnoreMoveInput(!inputEnabled);
 		
