@@ -76,7 +76,6 @@ void APlayerSitCharacter::Interact()
 {
     if (!PC)
     {
-        UE_LOG(LogTemp, Warning, TEXT("No player controller found when interacting."));
         return;
     }
 

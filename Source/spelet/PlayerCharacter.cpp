@@ -54,11 +54,7 @@ void APlayerCharacter::Interact()
 		End,
 		ECC_Visibility,
 		Params
-	);
-
-	#if WITH_EDITOR
-		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.f, 0, 1.f);
-	#endif
+	);	
 	
 	if (!bHit) return;
 

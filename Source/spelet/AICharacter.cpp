@@ -16,11 +16,23 @@ void AAICharacter::BeginPlay()
 	Super::BeginPlay();
 	currentWaypoint = 0;
 	
-	GetWorld()->GetTimerManager().SetTimer(MovementTimerHandle, this, &AAICharacter::AttemptMove, refreshTime, true);
-	if (MovementWaypoints.IsValidIndex(0))
+	if (GetWorld() && refreshTime > 0.0f)
+	{
+		GetWorld()->GetTimerManager().SetTimer(MovementTimerHandle, this, &AAICharacter::AttemptMove, refreshTime, true);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s har ogiltig refreshTime (%f)! Timern startades inte."), *GetName(), refreshTime);
+	}
+	
+	if (MovementWaypoints.IsValidIndex(0) && MovementWaypoints[0].Waypoint != nullptr)
 	{
 		SetActorLocation(MovementWaypoints[0].Waypoint->GetActorLocation());
 		SetActorRotation(MovementWaypoints[0].Waypoint->GetActorRotation());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s saknar giltig start-waypoint!"), *GetName());
 	}
 }
 
