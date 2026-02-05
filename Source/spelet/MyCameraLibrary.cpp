@@ -16,7 +16,9 @@ AActor* UMyCameraLibrary::GetCameraByName(UObject* WorldContextObject, const FSt
     {
         if (Actor && Actor->GetName().Contains(TargetName))
         {
+            
             return Actor;
+            
         }
     }
 
@@ -39,18 +41,25 @@ void UMyCameraLibrary::SwitchToCamera(UObject* WorldContextObject, const FString
     }
 }
 
-void UMyCameraLibrary::SwitchToActorOfClass(UObject* WorldContextObject, TSubclassOf<AActor> ActorClass, bool inputEnabled, bool antiAliasingEnabled)
+void UMyCameraLibrary::SwitchToActorOfClass(
+    UObject* WorldContextObject,
+    APawn* PawnToSwitch,
+    bool inputEnabled,
+    bool antiAliasingEnabled)
 {
-    AActor* CameraActor = UGameplayStatics::GetActorOfClass(WorldContextObject, ActorClass);
     APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0);
 
-    if (CameraActor && PC)
+    if (PawnToSwitch && PC)
     {
-        PC->SetViewTarget(CameraActor);
+        PC->Possess(PawnToSwitch);
+
         PC->SetIgnoreLookInput(!inputEnabled);
         PC->SetIgnoreMoveInput(!inputEnabled);
-       
-        FString Command = antiAliasingEnabled ? TEXT("r.DefaultFeature.AntiAliasing 1") : TEXT("r.DefaultFeature.AntiAliasing 0");
+
+        FString Command = antiAliasingEnabled
+            ? TEXT("r.DefaultFeature.AntiAliasing 1")
+            : TEXT("r.DefaultFeature.AntiAliasing 0");
+
         PC->ConsoleCommand(Command);
     }
 }

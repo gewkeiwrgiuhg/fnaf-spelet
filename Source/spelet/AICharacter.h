@@ -58,6 +58,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	float refreshTime = 10.0f;
 	
+	bool alreadyOnFinalWaypoint = false;
 	int32 currentWaypoint = 0;
 	FTimerHandle MovementTimerHandle;
 };

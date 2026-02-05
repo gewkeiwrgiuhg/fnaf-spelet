@@ -22,7 +22,7 @@ void AAICharacter::BeginPlay()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s har ogiltig refreshTime (%f)! Timern startades inte."), *GetName(), refreshTime);
+		UE_LOG(LogTemp, Error, TEXT("%s has an invalid refreshTime (%f)! Timer did not start."), *GetName(), refreshTime);
 	}
 	
 	if (MovementWaypoints.IsValidIndex(0) && MovementWaypoints[0].Waypoint != nullptr)
@@ -82,11 +82,19 @@ void AAICharacter::AttemptMove()
 		}
 		else // on final waypoint
 		{
+			if (alreadyOnFinalWaypoint == true)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("AI is already on final waypoint, not setting new waypoint"));
+				return;
+			}
+			
 			if (finalWaypoint.Waypoint == nullptr)
 			{
 				UE_LOG(LogTemp, Error, TEXT("Final waypoint not found"));
 				return;
 			}
+			
+			alreadyOnFinalWaypoint = true;
 			
 			UE_LOG(LogTemp, Warning, TEXT("Is on final waypoint"));
 			SetActorLocation(finalWaypoint.Waypoint->GetActorLocation());
