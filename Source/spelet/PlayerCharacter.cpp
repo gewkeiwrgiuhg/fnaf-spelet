@@ -17,7 +17,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 0.f;
 	CameraBoom->bUsePawnControlRotation = true;
-	CameraBoom->bEnableCameraLag = true;
+	CameraBoom->bEnableCameraLag = false;
 	CameraBoom->bEnableCameraRotationLag = true;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -30,7 +30,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UE_LOG(LogTemp, Warning, TEXT("Player character has been spawned!"));
 }
 	
 // Called every frame
