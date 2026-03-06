@@ -10,20 +10,27 @@ AAICharacter::AAICharacter()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void AAICharacter::StartAI()
+{
+	if (GetWorld() && refreshTime > 0.0f)
+	{
+		GetWorld()->GetTimerManager().SetTimer(
+			MovementTimerHandle,
+			this,
+			&AAICharacter::AttemptMove,
+			refreshTime,
+			true
+		);
+
+		UE_LOG(LogTemp, Warning, TEXT("%s AI started"), *GetName());
+	}
+}
+
 // Called when the game starts or when spawned
 void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	currentWaypoint = 0;
-	
-	if (GetWorld() && refreshTime > 0.0f)
-	{
-		GetWorld()->GetTimerManager().SetTimer(MovementTimerHandle, this, &AAICharacter::AttemptMove, refreshTime, true);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s has an invalid refreshTime (%f)! Timer did not start."), *GetName(), refreshTime);
-	}
 	
 	if (MovementWaypoints.IsValidIndex(0) && MovementWaypoints[0].Waypoint != nullptr)
 	{
@@ -88,26 +95,57 @@ void AAICharacter::AttemptMove()
 				return;
 			}
 			
-			if (finalWaypoint.Waypoint == nullptr)
+			if (finalWaypoint.Num() > 1)
 			{
-				UE_LOG(LogTemp, Error, TEXT("Final waypoint not found"));
-				return;
-			}
-			
-			alreadyOnFinalWaypoint = true;
-			
-			UE_LOG(LogTemp, Warning, TEXT("Is on final waypoint"));
-			SetActorLocation(finalWaypoint.Waypoint->GetActorLocation());
-			SetActorRotation(finalWaypoint.Waypoint->GetActorRotation());
-			
-			if (finalWaypoint.AnimationToPlay)
-			{
-				GetMesh()->PlayAnimation(finalWaypoint.AnimationToPlay, false);
+				// get a random waypoint to choose
+				int32 RandomIndex = FMath::RandRange(0, finalWaypoint.Num() - 1);
+
+				FWaypointData waypointData = finalWaypoint[RandomIndex];
+
+				if (waypointData.Waypoint == nullptr)
+				{
+					UE_LOG(LogTemp, Error, TEXT("Random final waypoint was null"));
+					return;
+				}
+
+				alreadyOnFinalWaypoint = true;
+
+				SetActorLocation(waypointData.Waypoint->GetActorLocation());
+				SetActorRotation(waypointData.Waypoint->GetActorRotation());
+
+				if (waypointData.AnimationToPlay)
+				{
+					GetMesh()->PlayAnimation(waypointData.AnimationToPlay, false);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("No animation found for random final waypoint"));
+				}
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("No animation found to play"));
+				if (finalWaypoint[0].Waypoint == nullptr)
+				{
+					UE_LOG(LogTemp, Error, TEXT("Final waypoint not found"));
+					return;
+				}
+			
+				alreadyOnFinalWaypoint = true;
+			
+				UE_LOG(LogTemp, Warning, TEXT("Is on final waypoint"));
+				SetActorLocation(finalWaypoint[0].Waypoint->GetActorLocation());
+				SetActorRotation(finalWaypoint[0].Waypoint->GetActorRotation());
+			
+				if (finalWaypoint[0].AnimationToPlay)
+				{
+					GetMesh()->PlayAnimation(finalWaypoint[0].AnimationToPlay, false);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("No animation found to play"));
+				}
 			}
+			
 		}
 	}
 	else

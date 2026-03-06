@@ -19,4 +19,7 @@ class SPELET_API UMyCameraLibrary : public UBlueprintFunctionLibrary
 
 	UFUNCTION(BlueprintCallable, Category="Camera", meta=(WorldContext = "WorldContextObject"))
 	static void SwitchToActorOfClass(UObject* WorldContextObject, APawn* PawnToSwitch, bool inputEnabled, bool antiAliasingEnabled);
+
+	UFUNCTION(BlueprintCallable, Category="Camera", meta=(WorldContext = "WorldContextObject"))
+	static void ResetAllLights(UObject* WorldContextObject);
 };

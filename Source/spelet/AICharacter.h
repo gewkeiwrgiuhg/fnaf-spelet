@@ -47,7 +47,7 @@ public:
 	FString name = "Placeholder";
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom Navigation")
-	FWaypointData finalWaypoint; 
+	TArray<FWaypointData> finalWaypoint; 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom Navigation")
 	TArray<FWaypointData> MovementWaypoints;
@@ -57,6 +57,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	float refreshTime = 10.0f;
+	
+	UFUNCTION(BlueprintCallable)
+	void StartAI();
 	
 	bool alreadyOnFinalWaypoint = false;
 	int32 currentWaypoint = 0;
