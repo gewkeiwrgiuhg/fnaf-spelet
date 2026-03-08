@@ -17,7 +17,8 @@ AGameStartTrigger::AGameStartTrigger()
 void AGameStartTrigger::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Wall1->SetActorEnableCollision(false);
+	Wall2->SetActorEnableCollision(false);
 }
 
 // Called every frame
@@ -35,5 +36,11 @@ void AGameStartTrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherAct
 		{
 			AIToActivate->StartAI();
 		}
+		
+		if (Wall1)
+			Wall1->SetActorEnableCollision(true);
+
+		if (Wall2)
+			Wall2->SetActorEnableCollision(true);
 	}
 }

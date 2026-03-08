@@ -29,4 +29,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AAICharacter* AIToActivate;
+	
+	UPROPERTY(EditAnywhere)
+	AActor* Wall1;
+
+	UPROPERTY(EditAnywhere)
+	AActor* Wall2;
 };

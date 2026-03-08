@@ -29,15 +29,15 @@ void UMyCameraLibrary::ResetAllLights(UObject* WorldContextObject)
     UWorld* World = (WorldContextObject) ? WorldContextObject->GetWorld() : nullptr;
     if (!World) return;
     
-    TArray<AActor*> Cameras;
-    UGameplayStatics::GetAllActorsOfClass(World, ACameraActor::StaticClass(), Cameras);
+    TArray<AActor*> AllActors;
+    UGameplayStatics::GetAllActorsOfClass(World, AActor::StaticClass(), AllActors);
         
-    for (AActor* Cam : Cameras)
+    for (AActor* Actor : AllActors)
     {
-        UE_LOG(LogTemp, Warning, TEXT("%s"), *Cam->GetName());
-            
+        if (!Actor->GetClass()->GetName().Contains(TEXT("BP_CameraTarget")))
+            continue;
         TArray<USpotLightComponent*> Lights;
-        Cam->GetComponents<USpotLightComponent>(Lights);
+        Actor->GetComponents<USpotLightComponent>(Lights);
 
         for (USpotLightComponent* Light : Lights)
         {
@@ -63,7 +63,7 @@ void UMyCameraLibrary::SwitchToCamera(UObject* WorldContextObject, const FString
         PC->SetIgnoreLookInput(!inputEnabled);
         PC->SetIgnoreMoveInput(!inputEnabled);
 
-        UMyCameraLibrary::ResetAllLights(WorldContextObject);
+        ResetAllLights(WorldContextObject);
         
         USpotLightComponent* SpotLight = CameraActor->FindComponentByClass<USpotLightComponent>();
         if (SpotLight)
