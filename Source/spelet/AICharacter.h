@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,18 +24,13 @@ class SPELET_API AAICharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AAICharacter();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats", meta = (ClampMin = "1", ClampMax = "20", UIMin = "1", UIMax = "20"))
@@ -60,8 +53,29 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void StartAI();
-	
+
+	// Door check
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Doors")
+	TArray<AActor*> DoorActors;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Doors")
+	float DoorCloseGraceTime = 5.0f;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDoorNotClosed);
+
+	UPROPERTY(BlueprintAssignable, Category="Doors")
+	FOnDoorNotClosed OnDoorNotClosed;
+
+	UFUNCTION()
+	void OnDoorStateChangedCallback();
+
 	bool alreadyOnFinalWaypoint = false;
 	int32 currentWaypoint = 0;
 	FTimerHandle MovementTimerHandle;
+	FTimerHandle DoorCheckTimerHandle;
+
+private:
+	void CheckNearbyDoors();
+	void OnGraceTimerExpired();
+	void BindDoorDispatchers();
 };

@@ -1,12 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "AICharacter.h"
 
-// Sets default values
 AAICharacter::AAICharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 }
 
@@ -26,7 +21,6 @@ void AAICharacter::StartAI()
 	}
 }
 
-// Called when the game starts or when spawned
 void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -41,20 +35,118 @@ void AAICharacter::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s saknar giltig start-waypoint!"), *GetName());
 	}
+
+	BindDoorDispatchers();
 }
 
-// Called every frame
 void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-// Called to bind functionality to input
 void AAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
 
+void AAICharacter::BindDoorDispatchers()
+{
+	for (AActor* Door : DoorActors)
+	{
+		if (Door == nullptr) continue;
+
+		FMulticastDelegateProperty* DelegateProperty = FindFProperty<FMulticastDelegateProperty>(
+			Door->GetClass(),
+			TEXT("OnDoorStateChanged") // Must match your Blueprint dispatcher name exactly
+		);
+
+		if (DelegateProperty)
+		{
+			FScriptDelegate NewDelegate;
+			NewDelegate.BindUFunction(this, TEXT("OnDoorStateChangedCallback"));
+
+			FMulticastScriptDelegate* MulticastDelegate = DelegateProperty->ContainerPtrToValuePtr<FMulticastScriptDelegate>(Door);
+			if (MulticastDelegate)
+			{
+				MulticastDelegate->Add(NewDelegate);
+				UE_LOG(LogTemp, Warning, TEXT("Bound to door dispatcher on %s"), *Door->GetName());
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Could not find OnDoorStateChanged dispatcher on %s"), *Door->GetName());
+		}
+	}
+}
+
+void AAICharacter::OnDoorStateChangedCallback()
+{
+	// Only care about door changes once AI is on final waypoint
+	if (!alreadyOnFinalWaypoint) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("Door state changed while AI is on final waypoint, checking doors..."));
+	CheckNearbyDoors();
+}
+
+void AAICharacter::CheckNearbyDoors()
+{
+	bool bAnyDoorOpen = false;
+
+	for (AActor* Door : DoorActors)
+	{
+		if (Door == nullptr) continue;
+
+		FBoolProperty* BoolProp = FindFProperty<FBoolProperty>(
+			Door->GetClass(),
+			TEXT("isOpen") // Your blueprint boolean variable name
+		);
+
+		if (BoolProp && BoolProp->GetPropertyValue_InContainer(Door))
+		{
+			bAnyDoorOpen = true;
+			UE_LOG(LogTemp, Warning, TEXT("Door %s is open! Player has %.1f seconds to close it."),
+				*Door->GetName(), DoorCloseGraceTime);
+		}
+	}
+
+	if (bAnyDoorOpen)
+	{
+		// Clear any existing timer before starting a new one
+		GetWorld()->GetTimerManager().ClearTimer(DoorCheckTimerHandle);
+
+		GetWorld()->GetTimerManager().SetTimer(
+			DoorCheckTimerHandle,
+			this,
+			&AAICharacter::OnGraceTimerExpired,
+			DoorCloseGraceTime,
+			false
+		);
+	}
+	else
+	{
+		// Door was closed in time, cancel the timer
+		GetWorld()->GetTimerManager().ClearTimer(DoorCheckTimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT("All doors are closed, timer cancelled."));
+	}
+}
+
+void AAICharacter::OnGraceTimerExpired()
+{
+	for (AActor* Door : DoorActors)
+	{
+		if (Door == nullptr) continue;
+
+		FBoolProperty* BoolProp = FindFProperty<FBoolProperty>(
+			Door->GetClass(),
+			TEXT("isOpen") // Your blueprint boolean variable name
+		);
+
+		if (BoolProp && BoolProp->GetPropertyValue_InContainer(Door))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Grace period expired! Door %s is still open."), *Door->GetName());
+			OnDoorNotClosed.Broadcast(); // Hook this up in Blueprint for your consequence
+		}
+	}
 }
 
 void AAICharacter::AttemptMove()
@@ -62,9 +154,9 @@ void AAICharacter::AttemptMove()
 	if (AILevel == 0) return;
 
 	int32 randomNumber = FMath::RandRange(1,20);
-	if (randomNumber <= AILevel) // kan flytta ai:n
+	if (randomNumber <= AILevel)
 	{
-		if (currentWaypoint + 1 < MovementWaypoints.Num()) // nuvarande waypoint är inte högre än totala mängden waypoints
+		if (currentWaypoint + 1 < MovementWaypoints.Num())
 		{
 			currentWaypoint++;
 			FWaypointData waypointData = MovementWaypoints[currentWaypoint];
@@ -97,9 +189,7 @@ void AAICharacter::AttemptMove()
 			
 			if (finalWaypoint.Num() > 1)
 			{
-				// get a random waypoint to choose
 				int32 RandomIndex = FMath::RandRange(0, finalWaypoint.Num() - 1);
-
 				FWaypointData waypointData = finalWaypoint[RandomIndex];
 
 				if (waypointData.Waypoint == nullptr)
@@ -109,6 +199,7 @@ void AAICharacter::AttemptMove()
 				}
 
 				alreadyOnFinalWaypoint = true;
+				CheckNearbyDoors(); // <-- Check doors on arrival
 
 				SetActorLocation(waypointData.Waypoint->GetActorLocation());
 				SetActorRotation(waypointData.Waypoint->GetActorRotation());
@@ -129,13 +220,14 @@ void AAICharacter::AttemptMove()
 					UE_LOG(LogTemp, Error, TEXT("Final waypoint not found"));
 					return;
 				}
-			
+
 				alreadyOnFinalWaypoint = true;
-			
+				CheckNearbyDoors(); // <-- Check doors on arrival
+
 				UE_LOG(LogTemp, Warning, TEXT("Is on final waypoint"));
 				SetActorLocation(finalWaypoint[0].Waypoint->GetActorLocation());
 				SetActorRotation(finalWaypoint[0].Waypoint->GetActorRotation());
-			
+
 				if (finalWaypoint[0].AnimationToPlay)
 				{
 					GetMesh()->PlayAnimation(finalWaypoint[0].AnimationToPlay, false);
@@ -145,7 +237,6 @@ void AAICharacter::AttemptMove()
 					UE_LOG(LogTemp, Error, TEXT("No animation found to play"));
 				}
 			}
-			
 		}
 	}
 	else
