@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AICharacter.h"
+#include "WB_Objective.h"
 #include "GameFramework/Actor.h"
 #include "GameStartTrigger.generated.h"
 
@@ -35,4 +36,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AActor* Wall2;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UWB_Objective* ObjectiveWidget;
 };

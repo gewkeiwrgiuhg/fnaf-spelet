@@ -2,8 +2,10 @@
 
 
 #include "GameStartTrigger.h"
-
+#include "WB_Objective.h"
 #include "PlayerCharacter.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AGameStartTrigger::AGameStartTrigger()
@@ -42,5 +44,26 @@ void AGameStartTrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherAct
 
 		if (Wall2)
 			Wall2->SetActorEnableCollision(true);
+		
+		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		if (PC)
+		{
+			TArray<UUserWidget*> FoundWidgets;
+			UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), FoundWidgets, UWB_Objective::StaticClass(), false);
+
+			if (FoundWidgets.Num() > 0)
+			{
+				ObjectiveWidget = Cast<UWB_Objective>(FoundWidgets[0]);
+			}
+
+			if (ObjectiveWidget)
+			{
+				ObjectiveWidget->SetObjective(FText::FromString(TEXT("Survive until 6 AM")));
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("Objective Widget not found"));
+			}
+		}
 	}
 }
