@@ -30,6 +30,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="Battery")
 	void SubtractBatteryValue();
+	
+	UFUNCTION(BlueprintCallable, Category="Battery")
+	void ChangeBatteryDepletionTime(float newValue);
 
 	UPROPERTY(BlueprintReadWrite, Category="UI")
 	UUserWidget* CameraUIRef;

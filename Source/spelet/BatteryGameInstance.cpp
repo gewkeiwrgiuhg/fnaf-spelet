@@ -25,3 +25,8 @@ void UBatteryGameInstance::SubtractBatteryValue()
 		OnBatteryValueChanged.Broadcast(BatteryValue);
 	}
 }
+
+void UBatteryGameInstance::ChangeBatteryDepletionTime(float newValue)
+{
+	batteryDepletionMultiplier = FMath::Clamp(batteryDepletionMultiplier + newValue, 1.0f, 100.0f);
+}
