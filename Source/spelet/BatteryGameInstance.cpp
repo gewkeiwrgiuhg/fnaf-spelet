@@ -7,8 +7,21 @@ void UBatteryGameInstance::SetBatteryValue(int32 NewValue)
 {
 	if (BatteryValue != NewValue)
 	{
-		BatteryValue = NewValue;
+		NewValue *= batteryDepletionMultiplier;
+		BatteryValue = FMath::Clamp(NewValue,0,100);
 		
+		OnBatteryValueChanged.Broadcast(BatteryValue);
+	}
+}
+
+void UBatteryGameInstance::SubtractBatteryValue()
+{
+	int32 batterySubtraction = FMath::RoundToInt(1.0f * batteryDepletionMultiplier);
+	int32 NewValue = FMath::Clamp(BatteryValue - batterySubtraction, 0, 100);
+    
+	if (BatteryValue != NewValue)
+	{
+		BatteryValue = NewValue;
 		OnBatteryValueChanged.Broadcast(BatteryValue);
 	}
 }

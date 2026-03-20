@@ -7,6 +7,9 @@ AAICharacter::AAICharacter()
 
 void AAICharacter::StartAI()
 {
+	UE_LOG(LogTemp, Warning, TEXT("%s StartAI called, AILevel = %d"), *GetName(), AILevel);	
+	
+	hasStarted = true;
 	if (GetWorld() && refreshTime > 0.0f)
 	{
 		GetWorld()->GetTimerManager().SetTimer(
@@ -37,6 +40,7 @@ void AAICharacter::BeginPlay()
 	}
 
 	BindDoorDispatchers();
+	UE_LOG(LogTemp, Warning, TEXT("AILevel (BeginPlay): %d"), AILevel);
 }
 
 void AAICharacter::Tick(float DeltaTime)
@@ -241,6 +245,7 @@ void AAICharacter::AttemptMove()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Roll failed, number gotten: %d vs AILevel: %d"), randomNumber, AILevel);
+		UE_LOG(LogTemp, Warning, TEXT("Roll failed, number gotten: %d vs AILevel: %d. Current waypoint: %d!"), randomNumber, AILevel, currentWaypoint);
+		UE_LOG(LogTemp, Warning, TEXT("%s AILevel (AttemptMove): %d"), *GetName(), AILevel);
 	}
 }

@@ -27,7 +27,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Battery")
 	void SetBatteryValue(int32 NewValue);
-    
+	
+	UFUNCTION(BlueprintCallable, Category="Battery")
+	void SubtractBatteryValue();
+
 	UPROPERTY(BlueprintReadWrite, Category="UI")
 	UUserWidget* CameraUIRef;
+	
+	UPROPERTY(BlueprintReadWrite, Category="Battery")
+	float batteryDepletionMultiplier = 1.f;
 };

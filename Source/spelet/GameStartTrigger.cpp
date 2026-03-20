@@ -36,6 +36,11 @@ void AGameStartTrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherAct
 	{
 		if (AIToActivate)
 		{
+			if (AIToActivate->hasStarted == true)
+			{
+				UE_LOG(LogTemp, Error, TEXT("AI has already started."));
+				return;
+			}
 			AIToActivate->StartAI();
 		}
 		

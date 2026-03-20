@@ -33,8 +33,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	bool hasStarted = false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats", meta = (ClampMin = "1", ClampMax = "20", UIMin = "1", UIMax = "20"))
-	int32 AILevel = 1;
+	int32 AILevel = 3;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
 	FString name = "Placeholder";
