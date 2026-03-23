@@ -30,3 +30,14 @@ void UBatteryGameInstance::ChangeBatteryDepletionTime(float newValue)
 {
 	batteryDepletionMultiplier = FMath::Clamp(batteryDepletionMultiplier + newValue, 1.0f, 100.0f);
 }
+
+void UBatteryGameInstance::SetTime(int32 NewTime)
+{
+	if (Time == NewTime)
+	{
+		return;
+	}
+	
+	Time = NewTime;
+	OnTimeChanged.Broadcast(Time);
+}
