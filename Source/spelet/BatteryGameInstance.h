@@ -28,6 +28,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Battery")
 	FBatteryValueChanged OnBatteryValueChanged;
 
+	UPROPERTY(BlueprintAssignable, Category="Time")
+	FTimeChanged OnTimeChanged;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Battery")
 	int32 BatteryValue = 100;
 

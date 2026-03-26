@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AICharacter.h"
+#include "CameraTrigger.h"
 #include "WB_Objective.h"
 #include "GameFramework/Actor.h"
 #include "GameStartTrigger.generated.h"
@@ -28,6 +29,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere)
+	ACameraTrigger* CameraTrigger;
+	
 	UPROPERTY(EditAnywhere)
 	AAICharacter* AIToActivate;
 	

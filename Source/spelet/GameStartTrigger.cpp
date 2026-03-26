@@ -5,6 +5,7 @@
 #include "WB_Objective.h"
 #include "PlayerCharacter.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Components/LightComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -49,6 +50,33 @@ void AGameStartTrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherAct
 
 		if (Wall2)
 			Wall2->SetActorEnableCollision(true);
+			
+		CameraTrigger->gameStarted = true;
+		
+		TArray<AActor*> AllActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), AllActors);
+
+		for (AActor* Actor : AllActors)
+		{
+			TArray<UActorComponent*> Components;
+			Actor->GetComponents(Components);
+
+			for (UActorComponent* Comp : Components)
+			{
+				if (Comp->ComponentHasTag(TEXT("Light")))
+				{
+					// Hitta ljuskomponenten och sätt visibility
+					ULightComponent* LightComp = Cast<ULightComponent>(Comp);
+					if (LightComp)
+					{
+						LightComp->SetVisibility(true);
+					}
+					break;
+				}
+			}
+		}
+		
+		
 		
 		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		if (PC)
