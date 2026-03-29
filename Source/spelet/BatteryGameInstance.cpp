@@ -3,27 +3,24 @@
 
 #include "BatteryGameInstance.h"
 
-void UBatteryGameInstance::SetBatteryValue(int32 NewValue)
+#include "Kismet/GameplayStatics.h"
+
+void UBatteryGameInstance::SetBatteryValue(float NewValue)
 {
-	if (BatteryValue != NewValue)
+	float Clamped = FMath::Clamp(NewValue, 0.0f, 100.0f);
+
+	if (!FMath::IsNearlyEqual(BatteryValue, Clamped))
 	{
-		NewValue *= batteryDepletionMultiplier;
-		BatteryValue = FMath::Clamp(NewValue,0,100);
-		
+		BatteryValue = Clamped;
 		OnBatteryValueChanged.Broadcast(BatteryValue);
 	}
 }
 
 void UBatteryGameInstance::SubtractBatteryValue()
 {
-	int32 batterySubtraction = FMath::RoundToInt(1.0f * batteryDepletionMultiplier);
-	int32 NewValue = FMath::Clamp(BatteryValue - batterySubtraction, 0, 100);
-    
-	if (BatteryValue != NewValue)
-	{
-		BatteryValue = NewValue;
-		OnBatteryValueChanged.Broadcast(BatteryValue);
-	}
+	float batterySubtraction = batteryDepletionRate * BatteryDepletionTime;
+    BatteryValue = FMath::Clamp(FMath::FloorToFloat((BatteryValue - batterySubtraction) * 10.f) / 10.f, 0.0f, 100.0f);
+	OnBatteryValueChanged.Broadcast(BatteryValue);
 }
 
 void UBatteryGameInstance::ChangeBatteryDepletionTime(float newValue)
@@ -40,4 +37,14 @@ void UBatteryGameInstance::SetTime(int32 NewTime)
 	
 	Time = NewTime;
 	OnTimeChanged.Broadcast(Time);
+}
+
+void UBatteryGameInstance::NextNight()
+{
+	Night += 1;
+	Night = FMath::Clamp(Night, 1, 5);
+	if (Night >= 5)
+	{
+		UGameplayStatics::OpenLevel(GetWorld(), FName("WinLevel"));
+	}
 }

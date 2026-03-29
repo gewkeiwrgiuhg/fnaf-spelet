@@ -2,6 +2,8 @@
 
 
 #include "GameStartTrigger.h"
+
+#include "BatteryGameInstance.h"
 #include "WB_Objective.h"
 #include "PlayerCharacter.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
@@ -51,7 +53,11 @@ void AGameStartTrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherAct
 		if (Wall2)
 			Wall2->SetActorEnableCollision(true);
 			
-		CameraTrigger->gameStarted = true;
+		UBatteryGameInstance* GI = Cast<UBatteryGameInstance>(GetGameInstance());
+		if (GI)
+		{
+			GI->gameStarted = true;
+		}
 		
 		TArray<AActor*> AllActors;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), AllActors);

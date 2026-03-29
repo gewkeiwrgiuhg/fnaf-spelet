@@ -7,7 +7,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FBatteryValueChanged,
-	int32,
+	float,
 	NewBatteryValue
 );
 
@@ -32,10 +32,10 @@ public:
 	FTimeChanged OnTimeChanged;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Battery")
-	int32 BatteryValue = 100;
+	float BatteryValue = 100;
 
 	UFUNCTION(BlueprintCallable, Category="Battery")
-	void SetBatteryValue(int32 NewValue);
+	void SetBatteryValue(float NewValue);
 	
 	UFUNCTION(BlueprintCallable, Category="Battery")
 	void SubtractBatteryValue();
@@ -52,6 +52,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Time")
 	void SetTime(int32 NewTime);
 	
+	UFUNCTION(BlueprintCallable, Category="Time")
+	void NextNight();
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool gameStarted = false;
+	
+	UPROPERTY(BlueprintReadOnly, Category="Time", meta=(AllowPrivateAccess=true))
+	int32 Night = 1;
+	
+	UPROPERTY(BlueprintReadWrite, Category="Battery", meta=(AllowPrivateAccess=true))
+	float BatteryDepletionTime = 0.1f;
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Battery")
+	float batteryDepletionRate = 1.0f; // Enheter per sekund
 private:
 	UPROPERTY(BlueprintReadOnly, Category="Time", meta=(AllowPrivateAccess=true))
 	int32 Time = 12;
