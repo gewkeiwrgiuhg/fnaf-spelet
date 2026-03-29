@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WB_Objective.h"
 #include "Engine/GameInstance.h"
 #include "Blueprint/UserWidget.h" // <--- Add this include
 #include "BatteryGameInstance.generated.h"
@@ -50,9 +51,6 @@ public:
 	float batteryDepletionMultiplier = 1.f;
 	
 	UFUNCTION(BlueprintCallable, Category="Time")
-	void SetTime(int32 NewTime);
-	
-	UFUNCTION(BlueprintCallable, Category="Time")
 	void NextNight();
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -66,6 +64,27 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, Category = "Battery")
 	float batteryDepletionRate = 1.0f; // Enheter per sekund
+
+	UPROPERTY(BlueprintReadWrite, Category="Animatronics")
+	int AILevelIncreasePerNight = 3;
+
+	UFUNCTION(BlueprintCallable, Category="Game")
+	void ResetEverything();
+
+	UFUNCTION(BlueprintCallable, Category="Game")
+	void DisableAllLights();
+
+	UFUNCTION(BlueprintCallable, Category = "Game")
+	void EnableAllLights();
+
+	UPROPERTY(BlueprintReadWrite, Category="Time")
+	int WinTime = 6;
+
+	UPROPERTY()
+	UWB_Objective* ObjectiveWidget;
+
+	UFUNCTION(BlueprintCallable, Category="Time")
+	void AddTime();
 private:
 	UPROPERTY(BlueprintReadOnly, Category="Time", meta=(AllowPrivateAccess=true))
 	int32 Time = 12;

@@ -62,27 +62,10 @@ void AGameStartTrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherAct
 		TArray<AActor*> AllActors;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), AllActors);
 
-		for (AActor* Actor : AllActors)
+		if (GI)
 		{
-			TArray<UActorComponent*> Components;
-			Actor->GetComponents(Components);
-
-			for (UActorComponent* Comp : Components)
-			{
-				if (Comp->ComponentHasTag(TEXT("Light")))
-				{
-					// Hitta ljuskomponenten och sätt visibility
-					ULightComponent* LightComp = Cast<ULightComponent>(Comp);
-					if (LightComp)
-					{
-						LightComp->SetVisibility(true);
-					}
-					break;
-				}
-			}
+			Cast<UBatteryGameInstance>(GI)->EnableAllLights();
 		}
-		
-		
 		
 		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		if (PC)
