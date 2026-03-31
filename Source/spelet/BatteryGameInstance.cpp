@@ -22,8 +22,8 @@ void UBatteryGameInstance::SetBatteryValue(float NewValue)
 
 void UBatteryGameInstance::SubtractBatteryValue()
 {
-	float batterySubtraction = batteryDepletionRate * BatteryDepletionTime;
-    BatteryValue = FMath::Clamp(FMath::FloorToFloat((BatteryValue - batterySubtraction) * 10.f) / 10.f, 0.0f, 100.0f);
+	float batterySubtraction = batteryDepletionRate * BatteryDepletionTime * batteryDepletionMultiplier;
+	BatteryValue = FMath::Clamp(BatteryValue - batterySubtraction, 0.0f, 100.0f);
 	OnBatteryValueChanged.Broadcast(BatteryValue);
 }
 

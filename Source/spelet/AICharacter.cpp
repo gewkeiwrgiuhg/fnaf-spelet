@@ -7,6 +7,8 @@ AAICharacter::AAICharacter()
 
 void AAICharacter::StartAI()
 {
+	if (playerDied) return;
+
 	UE_LOG(LogTemp, Warning, TEXT("%s StartAI called, AILevel = %d"), *GetName(), AILevel);	
 	
 	hasStarted = true;
@@ -94,6 +96,8 @@ void AAICharacter::OnDoorStateChangedCallback()
 
 void AAICharacter::CheckNearbyDoors()
 {
+	if (playerDied) return;
+
 	bool bAnyDoorOpen = false;
 
 	for (AActor* Door : DoorActors)
@@ -155,6 +159,13 @@ void AAICharacter::OnGraceTimerExpired()
 
 void AAICharacter::AttemptMove()
 {
+	if (playerDied)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(MovementTimerHandle);
+		return;
+	}
+
+
 	if (AILevel == 0) return;
 
 	int32 randomNumber = FMath::RandRange(1,20);

@@ -68,6 +68,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Doors")
 	FOnDoorNotClosed OnDoorNotClosed;
 
+	UPROPERTY(BlueprintReadWrite, Category="Animatronic")
+	bool playerDied = false;
+
 	UFUNCTION()
 	void OnDoorStateChangedCallback();
 
