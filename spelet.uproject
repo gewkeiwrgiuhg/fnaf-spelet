@@ -58,6 +58,10 @@
 			"SupportedTargetPlatforms": [
 				"Win64"
 			]
+		},
+		{
+			"Name": "ElectraUtil",
+			"Enabled": true
 		}
 	]
 }
