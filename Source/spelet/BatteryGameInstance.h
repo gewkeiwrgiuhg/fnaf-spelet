@@ -48,7 +48,7 @@ public:
 	UUserWidget* CameraUIRef;
 	
 	UPROPERTY(BlueprintReadWrite, Category="Battery")
-	float batteryDepletionMultiplier = 2.0f;
+	float batteryDepletionMultiplier = 0.1f;
 	
 	UFUNCTION(BlueprintCallable, Category="Time")
 	void NextNight();
